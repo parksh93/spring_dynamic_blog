@@ -1,0 +1,30 @@
+### properties 파일로 작성시 ###
+#spring.mvc.view.prefix=/WEB-INF/views/
+#spring.mvc.view.suffix=.jsp
+
+#spring.datasource.url=${url}
+#spring.datasource.username=${username_}
+#spring.datasource.password=${password}
+#spring.datasource.driver-class-name=${driver-class-name}
+
+#spring.profiles.active=db
+
+#mybatis.mapper-locations=classpath:mybatis/mapper/**/**.xml
+# -------------------------------------------------------------
+
+spring:
+    mvc:
+      view:
+          prefix: /WEB-INF/views/
+          suffix: .jsp
+    datasource:
+        url: ${url}
+        username: ${username_}
+        password: ${password}
+        driver-class-name: ${driver-class-name}
+    profiles:
+        active: db
+
+mybatis:
+    mapper-locations: classpath:mybatis/mapper/**/**.xml
+
