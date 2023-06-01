@@ -4,9 +4,44 @@
 <mapper namespace="com.spring.blog.repository.BlogRepository">
     <!--  리턴타입이 entity 등의 클래스인 경우 패키지명부터 적어준다  -->
     <select id="findAll" resultType="com.spring.blog.entity.Blog">
-        SELECT blog_id AS blogId, writer, blog_title As blogTitle, blog_content AS blogContent, published_at AS publishedAt, updated_at AS updatedAt, blog_count AS blogCount
-        FROM blog
+        SELECT
+            blog_id AS blogId,
+            writer,
+            blog_title As blogTitle,
+            blog_content AS blogContent,
+            published_at AS publishedAt,
+            updated_at AS updatedAt,
+            blog_count AS blogCount
+        FROM
+            blog
     </select>
+    <select id="findById" parameterType="long" resultType="com.spring.blog.entity.Blog">
+        SELECT
+            blog_id AS blogId,
+            writer,
+            blog_title As blogTitle,
+            blog_content AS blogContent,
+            published_at AS publishedAt,
+            updated_at AS updatedAt,
+            blog_count AS blogCount
+        FROM
+            blog
+        WHERE
+            blog_id = #{blogId}
+    </select>
+
+    <insert id="save" parameterType="com.spring.blog.entity.Blog">
+        INSERT INTO blog (writer, blog_title, blog_content) VALUES (#{writer},#{blogTitle},#{blogContent})
+    </insert>
+
+    <delete id="deleteById" parameterType="long">
+        DELETE FROM blog WHERE blog_id = #{blogId}
+    </delete>
+    <update id="update" parameterType="com.spring.blog.entity.Blog">
+        UPDATE blog
+        SET blog_title = #{blogTitle}, blog_content = #{blogContent}, updated_at = now()
+        WHERE blog_id = #{blogId}
+    </update>
 
     <!-- 테스트를 위한 쿼리문 -->
     <!-- 항상 같은 환경에서 테스트 해야 하기 때문에 -->
