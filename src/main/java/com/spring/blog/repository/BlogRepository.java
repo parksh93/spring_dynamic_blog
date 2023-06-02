@@ -5,7 +5,9 @@ import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
-@Mapper
+@Mapper // @Repository 어노테이션의 경우 빈컨테이너에 적재하는 용도고
+        // @Mapper 어노테이션의 경우 빈 컨테이너에서 구현체로 만들어줘서 MyBatis와 연동될 수 있게 해주기 때문에
+        // @Mapper를 써야한다
 public interface BlogRepository {
     // 사전에 정의해야 하는 메스드
     //테이블 생성
@@ -29,4 +31,6 @@ public interface BlogRepository {
     //JPA에서는 .save()를 동일하게 쓰지만, 현재 코드에서 메서드 오버로딩도 불가능하고
     //분리할 방법이 없으므로 메서드명을 다르게 사용한다
     void update(Blog blog);
+
+
 }

@@ -10,7 +10,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@TestInstance(TestInstance.Lifecycle.PER_CLASS) //DROP TABLE시 필요한 어노테이션
+//@TestInstance(TestInstance.Lifecycle.PER_METHOD) //@AfterAll시 DROP TABLE할때 필요한 어노테이션
 public class BlogRepositoryTest {
     @Autowired
     BlogRepository blogRepository;
@@ -45,6 +45,7 @@ public class BlogRepositoryTest {
 
     @Test
     public void saveTest(){
+        //fixture setter로 저장
         String writer = "추가유저";
         String blogTitle = "추가글제목";
         String blogContent = "추가글내용";
@@ -93,6 +94,7 @@ public class BlogRepositoryTest {
                 .blogTitle(blogTitle)
                 .blogContent(blogContent)
                 .build();
+        // 빌더패턴 이외의 방법 : 3번 데이터를 가져와서 변경되는 부분만 setter로 수정
 
         blogRepository.update(blog);
 

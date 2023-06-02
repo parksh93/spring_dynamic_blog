@@ -11,7 +11,7 @@ import java.sql.Date;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder   //빌더패턴 생성자
+@Builder   //빌더패턴 생성자(전체 생성자가 있어야 된다)
 public class Blog {
     private long blogId;
     private String writer;
