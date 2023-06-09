@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Scanner;
 
 //@Controller   //컨트롤러 지정
 //@ResponseBody    //REST형식 변환, 메서드 위에 붙으면 해당 메서드를 REST형식으로
