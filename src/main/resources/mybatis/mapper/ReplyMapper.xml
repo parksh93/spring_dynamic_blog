@@ -22,4 +22,13 @@
         FROM reply
         WHERE reply_id = #{replyId}
     </select>
+    <delete id="deleteByReplyId" parameterType="long">
+        DELETE FROM reply WHERE reply_id = #{replyId}
+    </delete>
+    <insert id="save" parameterType="com.spring.blog.dto.ReplyInsertDTO">
+        INSERT INTO reply (blog_id, reply_writer, reply_content) VALUES (#{blogId}, #{replyWriter}, #{replyContent})
+    </insert>
+    <update id="update" parameterType="com.spring.blog.dto.ReplyUpdateDTO">
+        UPDATE reply SET reply_content = #{replyContent}, updated_at = now() WHERE reply_id = #{replyId}
+    </update>
 </mapper>
