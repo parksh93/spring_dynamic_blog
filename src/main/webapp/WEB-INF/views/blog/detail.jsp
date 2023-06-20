@@ -82,7 +82,11 @@
                 <input type="button" class = "btn btn-primary" value="수정" onclick="updateBlog()">
                 <input type="hidden" name = "blogId" value="${blog.blogId}">
             </form>
-        </div>
+            <hr>
+            </div>
+            <div class = "row">
+                <div id="replies"></div>
+            </div>
         <script>
             function deleteBlog(){
                 let deleteForm = document.deleteForm;
@@ -105,6 +109,22 @@
                     updateForm.submit();
                 }
             }
+
+            let blogId = "${blog.blogId}";
+            let $replies = document.getElementById('replies');
+
+            function getAllReplies(blogId){
+                fetch(`/reply/${blogId}/all`, {method:'get'})
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log(data);
+                        for (let i of data) {
+                            $replies.innerHTML += `<p>내용 : ${i.replyId} </p>`;
+                            console.log(i.replyId);
+                        }
+                    });
+            }
+            getAllReplies(blogId);
             </script>
     </body>
 </html>
