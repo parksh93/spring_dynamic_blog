@@ -84,7 +84,5 @@ public class ReplyServiceTest {
                 .build();
 
         replyService.update(replyUpdateDTO);
-
-
     }
 }
