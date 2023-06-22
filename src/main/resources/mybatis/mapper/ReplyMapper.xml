@@ -31,4 +31,7 @@
     <update id="update" parameterType="com.spring.blog.dto.ReplyUpdateDTO">
         UPDATE reply SET reply_content = #{replyContent}, updated_at = now() WHERE reply_id = #{replyId}
     </update>
+    <delete id="deleteAllByBlogId" parameterType="long">
+        DELETE FROM reply WHERE blog_id = #{blogId}
+    </delete>
 </mapper>

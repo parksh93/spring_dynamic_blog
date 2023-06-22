@@ -53,4 +53,10 @@ public class ReplyController {
         replyService.save(replyInsertDTO);
         return ResponseEntity.ok("저장완료");
     }
+
+    @RequestMapping(value = "/{replyId}", method = RequestMethod.DELETE)
+    public ResponseEntity<String> deleteReply(@PathVariable long replyId){
+        replyService.deleteByReplyId(replyId);
+        return ResponseEntity.ok("삭제 완료");
+    }
 }

@@ -93,4 +93,14 @@ public class ReplyRepositoryTest {
         assertTrue(reply.getUpdatedAt().isAfter(reply.getPublishedAt()));
 
     }
+
+    @Test
+    @Transactional
+    public void deleteAllByBlogIdTest(){
+        long blogId = 2;
+
+        replyRepository.deleteAllByBlogId(blogId);
+
+        assertEquals(0,replyRepository.findAllByBlogId(blogId).size());
+    }
 }

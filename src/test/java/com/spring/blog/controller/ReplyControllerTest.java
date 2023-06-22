@@ -2,7 +2,9 @@ package com.spring.blog.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.spring.blog.dto.ReplyFindByIdDTO;
 import com.spring.blog.dto.ReplyInsertDTO;
+import com.spring.blog.repository.ReplyRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +17,11 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -25,6 +30,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
                         // MockMvc를 빈컨테이너에 적재하는 어노테이션
                         //MocMvc을 사용하는 이유는 단순히 해당 메서드가 돌아가는지가 아닌 해당 주소로 접속했을때 접속이 이루어지는지와 값이 잘 나오는지 검사하기 위해서이다
 class ReplyControllerTest {
+
+    @Autowired
+    ReplyRepository replyRepository;
 
     @Autowired
     private MockMvc mockMvc;
@@ -104,5 +112,19 @@ class ReplyControllerTest {
         result.andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].replyWriter").value(replyWriter))
                 .andExpect(jsonPath("$[0].replyContent").value(replyContent));
+    }
+
+    @Test
+    @Transactional
+    public void deleteReplyTest() throws Exception{
+        long replyId = 3;
+        long blogId = 2;
+        String url = "/reply/"+ replyId;
+
+        mockMvc.perform(delete(url) //.accept는 리턴 데잍가 있는 경우에 해당 데이터를 어떤 방식으로 받을지 기술
+                .accept(MediaType.TEXT_PLAIN));
+
+        assertEquals(2,replyRepository.findAllByBlogId(blogId).size());
+        assertNull(replyRepository.findByReplyId(replyId));
     }
 }
