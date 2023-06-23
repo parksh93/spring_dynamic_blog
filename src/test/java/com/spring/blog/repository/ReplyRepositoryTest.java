@@ -104,3 +104,4 @@ public class ReplyRepositoryTest {
         assertEquals(0,replyRepository.findAllByBlogId(blogId).size());
     }
 }
+

@@ -17,7 +17,14 @@ public interface ReplyRepository {
 
     void save(ReplyCreateRequestDTO replyInsertDTO);
 
+<<<<<<< HEAD
     void update(ReplyUpdateRequestDTO replyUpdateDTO);
 
     void deleteAllByBlogId(long blogId);
 }
+=======
+    void update(ReplyUpdateDTO replyUpdateDTO);
+
+    void deleteAllByBlogId(long blogId);
+}
+>>>>>>> b5d6438566d48edc3c9eff330c6c15ae29cbbb55

@@ -133,7 +133,11 @@
                         class="replyTextarea"></textarea>
                     <input type="button" value="작성" id="replySubmit" class="btn btn-primary replyInput">
                 </div>
+<<<<<<< HEAD
                 <div class="row" style="border: none; width: 100%;">
+=======
+                <div class="row" style="border: none;">
+>>>>>>> b5d6438566d48edc3c9eff330c6c15ae29cbbb55
                     <div id="replies"></div>
                 </div>
             </div>
@@ -178,7 +182,6 @@
 
                             data.map((reply, i) => { // 첫 파라미터 : 반복대상자료, 두번째 파라미터 순번
                                 let date = new Date(`\${reply.publishedAt}`);
-
                                 $replies.innerHTML += `<hr>
                                     <p class = 'reply'>
                                         <b class = 'writer'>\${reply.replyWriter}</b>
@@ -187,6 +190,7 @@
                                         <a class = 'reButton' style='margin-left:5px'>수정</a>
                                         <a class = 'reButton deleteReplyBtn' data-replyId='\${reply.replyId}'>삭제</a>
                                     </p><br>`;
+
                             });
                         });
                 }

@@ -59,4 +59,8 @@ public class ReplyController {
         replyService.deleteByReplyId(replyId);
         return ResponseEntity.ok("삭제 완료");
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> b5d6438566d48edc3c9eff330c6c15ae29cbbb55

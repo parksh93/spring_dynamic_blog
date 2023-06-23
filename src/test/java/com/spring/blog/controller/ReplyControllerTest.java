@@ -1,7 +1,12 @@
 package com.spring.blog.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.spring.blog.dto.ReplyCreateRequestDTO;
+
+import com.spring.blog.dto.ReplyUpdateRequestDTO;
+import com.spring.blog.dto.ReplyCreateRequestDTO;
+
 import com.spring.blog.repository.ReplyRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,6 +19,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
