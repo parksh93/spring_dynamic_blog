@@ -29,7 +29,7 @@
         INSERT INTO reply (blog_id, reply_writer, reply_content) VALUES (#{blogId}, #{replyWriter}, #{replyContent})
     </insert>
     <update id="update" parameterType="com.spring.blog.dto.ReplyUpdateRequestDTO">
-        UPDATE reply SET reply_content = #{replyContent}, updated_at = now() WHERE reply_id = #{replyId}
+        UPDATE reply SET reply_writer = #{replyWriter}, reply_content = #{replyContent}, updated_at = now() WHERE reply_id = #{replyId}
     </update>
     <delete id="deleteAllByBlogId" parameterType="long">
         DELETE FROM reply WHERE blog_id = #{blogId}

@@ -8,6 +8,7 @@ import com.spring.blog.dto.ReplyUpdateRequestDTO;
 import com.spring.blog.dto.ReplyCreateRequestDTO;
 
 import com.spring.blog.repository.ReplyRepository;
+import com.spring.blog.service.ReplyService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -129,5 +130,33 @@ class ReplyControllerTest {
 
         assertEquals(2,replyRepository.findAllByBlogId(blogId).size());
         assertNull(replyRepository.findByReplyId(replyId));
+    }
+
+    @Test
+    @Transactional
+    public void updateReplyTest() throws Exception{
+        long replyId = 4;
+        String replyWriter = "냥냥이";
+        String replyContent = "왈왈";
+        String url = "/reply/"+replyId;
+
+        ReplyUpdateRequestDTO replyUpdateRequestDTO = ReplyUpdateRequestDTO.builder()
+                .replyWriter(replyWriter)
+                .replyContent(replyContent)
+                .build();
+
+        // 직렬화
+        final String request = objectMapper.writeValueAsString(replyUpdateRequestDTO);
+
+        mockMvc.perform(patch(url).contentType(MediaType.APPLICATION_JSON).content(request));
+
+        final ResultActions resultActions = mockMvc.perform(get(url).accept(MediaType.APPLICATION_JSON));
+
+        resultActions.andExpect(status().isOk())
+                .andExpect(jsonPath("$.replyWriter").value(replyWriter))
+                .andExpect(jsonPath("$.replyContent").value(replyContent));
+
+//        assertEquals(replyWriter, replyRepository.findByReplyId(replyId).getReplyWriter());
+//        assertEquals(replyContent, replyRepository.findByReplyId(replyId).getReplyContent());
     }
 }

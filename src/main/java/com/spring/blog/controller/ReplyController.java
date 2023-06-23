@@ -2,6 +2,7 @@ package com.spring.blog.controller;
 
 import com.spring.blog.dto.ReplyResponseDTO;
 import com.spring.blog.dto.ReplyCreateRequestDTO;
+import com.spring.blog.dto.ReplyUpdateRequestDTO;
 import com.spring.blog.exception.NotFoundReplyByReplyIdException;
 import com.spring.blog.service.ReplyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,8 +50,8 @@ public class ReplyController {
 
     @RequestMapping(value = "", method = RequestMethod.POST)
     // json이기 때문에 @RequestBody(json 데이터 역직렬화헤줌)가 필요하다
-    public ResponseEntity<String> insertReply(@RequestBody ReplyCreateRequestDTO replyInsertDTO){
-        replyService.save(replyInsertDTO);
+    public ResponseEntity<String> insertReply(@RequestBody ReplyCreateRequestDTO replyCreateRequestDTO){
+        replyService.save(replyCreateRequestDTO);
         return ResponseEntity.ok("저장완료");
     }
 
@@ -59,8 +60,13 @@ public class ReplyController {
         replyService.deleteByReplyId(replyId);
         return ResponseEntity.ok("삭제 완료");
     }
-<<<<<<< HEAD
+
+    @RequestMapping(value = "/{replyId}", method = {RequestMethod.PUT, RequestMethod.PATCH})
+    public ResponseEntity<String> updateReply(@PathVariable long replyId, @RequestBody ReplyUpdateRequestDTO replyUpdateRequestDTO){
+        replyUpdateRequestDTO.setReplyId(replyId);
+
+        replyService.update(replyUpdateRequestDTO);
+        return ResponseEntity.ok("수정 완료");
+    }
 }
-=======
-}
->>>>>>> b5d6438566d48edc3c9eff330c6c15ae29cbbb55
+

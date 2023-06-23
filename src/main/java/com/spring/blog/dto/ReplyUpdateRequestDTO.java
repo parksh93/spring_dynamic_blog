@@ -11,10 +11,12 @@ import lombok.*;
 @ToString
 public class ReplyUpdateRequestDTO {
     private long replyId;
+    private String replyWriter;
     private String replyContent;
 
     public ReplyUpdateRequestDTO(Reply reply){
         this.replyId = reply.getReplyId();
+        this.replyWriter = reply.getReplyWriter();
         this.replyContent = reply.getReplyContent();
     }
 }

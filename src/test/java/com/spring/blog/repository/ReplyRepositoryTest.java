@@ -78,9 +78,11 @@ public class ReplyRepositoryTest {
     @Transactional
     public void updateTest(){
         long replyId = 3;
+        String replyWriter = "수정자";
         String replyContent = "수정했어요";
         ReplyUpdateRequestDTO replyUpdateDTO = ReplyUpdateRequestDTO.builder()
                 .replyId(replyId)
+                .replyWriter(replyWriter)
                 .replyContent(replyContent)
                 .build();
 

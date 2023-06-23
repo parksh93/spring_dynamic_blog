@@ -128,17 +128,35 @@
                     <input type="hidden" name="blogId" value="${blog.blogId}">
                 </form>
                 <div style="height: 100px; margin-top: 10px; ">
-                    <input type="text" name="replyWriter" id="replyWriter">
+                    <input type="text" name="replyWriter" id="replyWriter" placeholder="작성자를 입력하세요">
                     <textarea placeholder="댓글을 작성해주세요" name="replyContent" id="replyContent"
                         class="replyTextarea"></textarea>
                     <input type="button" value="작성" id="replySubmit" class="btn btn-primary replyInput">
                 </div>
-<<<<<<< HEAD
                 <div class="row" style="border: none; width: 100%;">
-=======
-                <div class="row" style="border: none;">
->>>>>>> b5d6438566d48edc3c9eff330c6c15ae29cbbb55
                     <div id="replies"></div>
+                </div>
+            </div>
+            <!-- Modal -->
+            <div class="modal fade" id="replyUpdateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">댓글 수정</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p><b>작성자</b></p>
+                        <input type="text" class="updateReplyWriter">
+                        <p><b>댓글</b></p>
+                        <textarea class = 'replyTextarea updateReplyContent'></textarea>
+                        <input type="hidden" class="updateReplyId">
+                    </div>
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                    <button type="button" class="btn btn-primary" id="updateSubmitBtn" data-bs-dismiss="modal">수정</button>
+                    </div>
+                </div>
                 </div>
             </div>
             <script>
@@ -165,7 +183,7 @@
                 }
 
                 let blogId = "${blog.blogId}";
-                let $replies = document.getElementById('replies');
+                const $replies = document.getElementById('replies');
                 function getAllReplies(blogId) {
                     fetch(`/reply/${blogId}/all`, { method: 'get' })
                         .then(res => res.json())
@@ -181,31 +199,44 @@
                             // }
 
                             data.map((reply, i) => { // 첫 파라미터 : 반복대상자료, 두번째 파라미터 순번
-                                let date = new Date(`\${reply.publishedAt}`);
+                                let date = "";
+                                let check = false;
+                                if(reply.publishedAt !== reply.updatedAt){
+                                    date = new Date(`\${reply.updatedAt}`);
+                                    check = true;
+                                }else{
+                                    date = new Date(`\${reply.publishedAt}`);
+                                }
                                 $replies.innerHTML += `<hr>
                                     <p class = 'reply'>
-                                        <b class = 'writer'>\${reply.replyWriter}</b>
-                                        <span class='date'>\${date.getFullYear()}년 \${date.getMonth()}월 \${date.getDate()}일</span>
-                                        <br><span class ='replyContent'>\${reply.replyContent}</span>
-                                        <a class = 'reButton' style='margin-left:5px'>수정</a>
+                                        <b class = 'writer' >\${reply.replyWriter}</b>
+                                        <span class='date' id='date\${reply.replyId}'>\${date.getFullYear()}년 \${date.getMonth()+1}월 \${date.getDate()}일 \${date.getHours()}시 \${date.getMinutes()}분</span>
+                                        <br><span class ='replyContent' >\${reply.replyContent}</span>
+                                        <a class = 'reButton updateReplyBtn' 
+                                            style='margin-left:5px' data-bs-toggle='modal' data-bs-target='#replyUpdateModal' 
+                                            data-modalReplyWriter='\${reply.replyWriter}' data-modalReplyContent='\${reply.replyContent}' data-modalReplyId='\${reply.replyId}'>수정</a>
                                         <a class = 'reButton deleteReplyBtn' data-replyId='\${reply.replyId}'>삭제</a>
                                     </p><br>`;
 
+                                if(check){
+                                    document.getElementById(`date\${reply.replyId}`).innerHTML += "<span style='color:gray'>(수정됨)</span>";
+                                }
                             });
                         });
                 }
                 getAllReplies(blogId);
+           
 
                 function insertReply() {
-                    let url = `http://localhost:8080/reply`;
+                    let url = `/reply`;
                     //내용이 없거나 띄어쓰기만 넣어놓고 작성하는것을 막는다.
                     //금칙어는 cont ban =["금칙어내용"] 변수에 담아놓고 includes(ban)로 검사한다.
                     if (document.getElementById("replyWriter").value.trim() === "") {
-                        alert("작성자를 입력헤주세요");
+                        alert("작성자를 입력해주세요");
                         return;
                     }
                     if (document.getElementById("replyContent").value.trim() === "") {
-                        alert("댓글을 입력헤주세요");
+                        alert("댓글을 입력해주세요");
                         return;
                     }
                     fetch(url, {
@@ -231,20 +262,68 @@
 
                 $replies.onclick = e =>{
                     //#replies의 자손(공백/자식은 >) 객체 중 .deleteReplyBtn인지 확인
-                    if(!e.target.matches('#replies .deleteReplyBtn')){
+                    if(!e.target.matches('#replies .deleteReplyBtn') && !e.target.matches('#replies .updateReplyBtn')){
                         return;
                     }
-                    //event 객체안에 target안에 dataset안에 replyId(카멜케이스 인정 X 소문자로 되어있음)가 있다
-                    const replyId = e.target.dataset.replyid;
-                    if(confirm("댓글을 삭제하시겠습니까?")){
-                        fetch(`/reply/\${replyId}`,{method: 'delete'})
-                        .then(()=>{
-                            alert("삭제완료");
-                            getAllReplies(blogId);
-                        });
+
+                    if(e.target.matches('#replies .deleteReplyBtn')){
+                        //event 객체안에 target안에 dataset안에 replyId(카멜케이스 인정 X 소문자로 되어있음)가 있다
+                        const replyId = e.target.dataset.replyid;
+
+                        if(confirm("댓글을 삭제하시겠습니까?")){
+                            fetch(`/reply/\${replyId}`,{method: 'delete'})
+                            .then(()=>{
+                                alert("삭제완료");
+                                getAllReplies(blogId);
+                            });
+                        }
+                    }else if(e.target.matches('#replies .updateReplyBtn')){
+                        const replyWriter = e.target.dataset.modalreplywriter;
+                        const replyContent = e.target.dataset.modalreplycontent;
+                        const replyId = e.target.dataset.modalreplyid;
+
+                        document.querySelector('.updateReplyWriter').value = replyWriter;
+                        document.querySelector('.updateReplyContent').value = replyContent;
+                        document.querySelector('.updateReplyId').value = replyId;
+                     }
+                }
+                document.getElementById('updateSubmitBtn').addEventListener("click",updateReplyFunc);
+
+                function updateReplyFunc(){
+                    const replyId = document.querySelector('.updateReplyId').value;
+                    const $replyWriter = document.querySelector(".updateReplyWriter");
+                    const $replyContent = document.querySelector(".updateReplyContent");
+
+                    if ($replyWriter.value.trim() === "") {
+                        alert("작성자를 입력해주세요");
+                        $replyWriter.focus();
+                        return;
                     }
+                    if ($replyContent.value.trim() === "") {
+                        alert("댓글을 입력해주세요");
+                        $replyContent.focus();
+                        return;
+                    }
+
+                    fetch(`/reply/\${replyId}`, {
+                            method: 'PATCH',
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({
+                            replyWriter: $replyWriter.value,
+                            replyContent: $replyContent.value
+                        })
+                    })
+                    .then(()=>{
+                        alert("수정완료");
+                        getAllReplies(blogId);
+                    });
+
                 }
             </script>
+            <!-- JavaScript Bundle with Popper -->
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
         </body>
 
         </html>
