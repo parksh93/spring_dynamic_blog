@@ -1,8 +1,8 @@
 package com.spring.blog.repository;
 
-import com.spring.blog.dto.ReplyFindByIdDTO;
-import com.spring.blog.dto.ReplyInsertDTO;
-import com.spring.blog.dto.ReplyUpdateDTO;
+import com.spring.blog.dto.ReplyResponseDTO;
+import com.spring.blog.dto.ReplyCreateRequestDTO;
+import com.spring.blog.dto.ReplyUpdateRequestDTO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ public class ReplyRepositoryTest {
     public void findAllByBlogIdTest(){
         int blogId = 2;
 
-        List<ReplyFindByIdDTO> replyList = replyRepository.findAllByBlogId(blogId);
+        List<ReplyResponseDTO> replyList = replyRepository.findAllByBlogId(blogId);
 
         assertEquals(3, replyList.size());
     }
@@ -34,7 +34,7 @@ public class ReplyRepositoryTest {
     public void findByReplyIdTest(){
         long replyId = 3;
 
-        ReplyFindByIdDTO reply = replyRepository.findByReplyId(replyId);
+        ReplyResponseDTO reply = replyRepository.findByReplyId(replyId);
 
         assertNotNull(reply);
         assertEquals("we",reply.getReplyWriter());
@@ -47,8 +47,8 @@ public class ReplyRepositoryTest {
         int blogId = 2;
 
         replyRepository.deleteByReplyId(replyId);
-        List<ReplyFindByIdDTO> replyList = replyRepository.findAllByBlogId(blogId);
-        ReplyFindByIdDTO reply = replyRepository.findByReplyId(replyId);
+        List<ReplyResponseDTO> replyList = replyRepository.findAllByBlogId(blogId);
+        ReplyResponseDTO reply = replyRepository.findByReplyId(replyId);
 
         assertEquals(2, replyList.size());
         assertNull(reply);
@@ -60,14 +60,14 @@ public class ReplyRepositoryTest {
         long blogId = 2;
         String replyWriter = "추가작성자";
         String replyContent = "안녕하세요 추가로 작성했어요";
-        ReplyInsertDTO replyInsertDTO = ReplyInsertDTO.builder()
+        ReplyCreateRequestDTO replyInsertDTO = ReplyCreateRequestDTO.builder()
                 .blogId(blogId)
                 .replyWriter(replyWriter)
                 .replyContent(replyContent)
                 .build();
 
         replyRepository.save(replyInsertDTO);
-        List<ReplyFindByIdDTO> replyList = replyRepository.findAllByBlogId(blogId);
+        List<ReplyResponseDTO> replyList = replyRepository.findAllByBlogId(blogId);
 
         assertEquals(4, replyList.size());
         assertEquals(replyWriter, replyList.get(replyList.size()-1).getReplyWriter());
@@ -79,18 +79,28 @@ public class ReplyRepositoryTest {
     public void updateTest(){
         long replyId = 3;
         String replyContent = "수정했어요";
-        ReplyUpdateDTO replyUpdateDTO = ReplyUpdateDTO.builder()
-                            .replyId(replyId)
-                            .replyContent(replyContent)
-                            .build();
+        ReplyUpdateRequestDTO replyUpdateDTO = ReplyUpdateRequestDTO.builder()
+                .replyId(replyId)
+                .replyContent(replyContent)
+                .build();
 
         replyRepository.update(replyUpdateDTO);
-        ReplyFindByIdDTO reply = replyRepository.findByReplyId(replyId);
+        ReplyResponseDTO reply = replyRepository.findByReplyId(replyId);
 
         assertEquals(replyContent, reply.getReplyContent());
         assertNotEquals(reply.getPublishedAt(), reply.getUpdatedAt());
         // updatedAt이 publishedAt보다 이후시점(after)이다
         assertTrue(reply.getUpdatedAt().isAfter(reply.getPublishedAt()));
 
+    }
+
+    @Test
+    @Transactional
+    public void deleteAllByBlogIdTest(){
+        long blogId = 2;
+
+        replyRepository.deleteAllByBlogId(blogId);
+
+        assertEquals(0,replyRepository.findAllByBlogId(blogId).size());
     }
 }

@@ -1,9 +1,8 @@
 package com.spring.blog.service;
 
-import com.spring.blog.dto.ReplyFindByIdDTO;
-import com.spring.blog.dto.ReplyInsertDTO;
-import com.spring.blog.dto.ReplyUpdateDTO;
-import com.spring.blog.repository.ReplyRepository;
+import com.spring.blog.dto.ReplyResponseDTO;
+import com.spring.blog.dto.ReplyCreateRequestDTO;
+import com.spring.blog.dto.ReplyUpdateRequestDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,7 +23,7 @@ public class ReplyServiceTest {
     public void findAllByBlogIdTest(){
         long blogId = 2;
 
-        List<ReplyFindByIdDTO> replyList = replyService.findAllByBlogId(blogId);
+        List<ReplyResponseDTO> replyList = replyService.findAllByBlogId(blogId);
 
         assertEquals(3, replyList.size());
     }
@@ -34,7 +33,7 @@ public class ReplyServiceTest {
     public void findByReplyIdTest(){
         long replyId = 3;
 
-        ReplyFindByIdDTO reply = replyService.findByReplyId(replyId);
+        ReplyResponseDTO reply = replyService.findByReplyId(replyId);
 
         assertEquals("we",reply.getReplyWriter());
         assertEquals(3,reply.getReplyId());
@@ -59,7 +58,7 @@ public class ReplyServiceTest {
         String replyWriter = "추가작성자";
         String replyContent = "추가 내용";
 
-        ReplyInsertDTO replyInsertDTO = ReplyInsertDTO.builder()
+        ReplyCreateRequestDTO replyInsertDTO = ReplyCreateRequestDTO.builder()
                 .blogId(blogId)
                 .replyWriter(replyWriter)
                 .replyContent(replyContent)
@@ -67,7 +66,7 @@ public class ReplyServiceTest {
 
         replyService.save(replyInsertDTO);
 
-        List<ReplyFindByIdDTO> replyFindByIdDTOList = replyService.findAllByBlogId(blogId);
+        List<ReplyResponseDTO> replyFindByIdDTOList = replyService.findAllByBlogId(blogId);
         assertEquals(2, replyFindByIdDTOList.size());
         assertEquals(replyWriter, replyFindByIdDTOList.get(replyFindByIdDTOList.size()-1).getReplyWriter());
     }
@@ -78,7 +77,7 @@ public class ReplyServiceTest {
         long replyId = 2;
         String replyContent = "내용수정";
 
-        ReplyUpdateDTO replyUpdateDTO = ReplyUpdateDTO.builder()
+        ReplyUpdateRequestDTO replyUpdateDTO = ReplyUpdateRequestDTO.builder()
                 .replyId(replyId)
                 .replyContent(replyContent)
                 .build();

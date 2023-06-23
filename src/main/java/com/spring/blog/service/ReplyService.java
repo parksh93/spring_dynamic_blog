@@ -1,20 +1,19 @@
 package com.spring.blog.service;
 
-import com.spring.blog.dto.ReplyFindByIdDTO;
-import com.spring.blog.dto.ReplyInsertDTO;
-import com.spring.blog.dto.ReplyUpdateDTO;
-import org.springframework.stereotype.Service;
+import com.spring.blog.dto.ReplyResponseDTO;
+import com.spring.blog.dto.ReplyCreateRequestDTO;
+import com.spring.blog.dto.ReplyUpdateRequestDTO;
 
 import java.util.List;
 
 public interface ReplyService {
-    List<ReplyFindByIdDTO> findAllByBlogId(long blogId);
+    List<ReplyResponseDTO> findAllByBlogId(long blogId);
 
-    ReplyFindByIdDTO findByReplyId(long replyId);
+    ReplyResponseDTO findByReplyId(long replyId);
 
     void deleteByReplyId(long replyId);
 
-    void save(ReplyInsertDTO replyInsertDTO);
+    void save(ReplyCreateRequestDTO replyInsertDTO);
 
-    void update(ReplyUpdateDTO replyUpdateDTO);
+    void update(ReplyUpdateRequestDTO replyUpdateDTO);
 }

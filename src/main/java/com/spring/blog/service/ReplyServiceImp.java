@@ -1,8 +1,8 @@
 package com.spring.blog.service;
 
-import com.spring.blog.dto.ReplyFindByIdDTO;
-import com.spring.blog.dto.ReplyInsertDTO;
-import com.spring.blog.dto.ReplyUpdateDTO;
+import com.spring.blog.dto.ReplyResponseDTO;
+import com.spring.blog.dto.ReplyCreateRequestDTO;
+import com.spring.blog.dto.ReplyUpdateRequestDTO;
 import com.spring.blog.repository.ReplyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,12 +19,12 @@ public class ReplyServiceImp implements ReplyService{
     }
 
     @Override
-    public List<ReplyFindByIdDTO> findAllByBlogId(long blogId) {
+    public List<ReplyResponseDTO> findAllByBlogId(long blogId) {
         return  replyRepository.findAllByBlogId(blogId);
     }
 
     @Override
-    public ReplyFindByIdDTO findByReplyId(long replyId) {
+    public ReplyResponseDTO findByReplyId(long replyId) {
         return replyRepository.findByReplyId(replyId);
     }
 
@@ -34,12 +34,12 @@ public class ReplyServiceImp implements ReplyService{
     }
 
     @Override
-    public void save(ReplyInsertDTO replyInsertDTO) {
+    public void save(ReplyCreateRequestDTO replyInsertDTO) {
         replyRepository.save(replyInsertDTO);
     }
 
     @Override
-    public void update(ReplyUpdateDTO replyUpdateDTO) {
+    public void update(ReplyUpdateRequestDTO replyUpdateDTO) {
         replyRepository.update(replyUpdateDTO);
     }
 

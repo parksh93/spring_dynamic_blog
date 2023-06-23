@@ -1,7 +1,7 @@
 package com.spring.blog.controller;
 
-import com.spring.blog.dto.ReplyFindByIdDTO;
-import com.spring.blog.dto.ReplyInsertDTO;
+import com.spring.blog.dto.ReplyResponseDTO;
+import com.spring.blog.dto.ReplyCreateRequestDTO;
 import com.spring.blog.exception.NotFoundReplyByReplyIdException;
 import com.spring.blog.service.ReplyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,15 +24,15 @@ public class ReplyController {
     // 어떤 자원에 접근할것인지만 uri에 명시
     @RequestMapping(value = "/{blogId}/all", method = RequestMethod.GET)
     // rest서버는 응답시 응답코드와 응답객체를 넘기기 때문에 ResponseEntity를 리턴
-    public ResponseEntity<List<ReplyFindByIdDTO>> findAllReplies(@PathVariable long blogId){
-        List<ReplyFindByIdDTO> replyList = replyService.findAllByBlogId(blogId);
+    public ResponseEntity<List<ReplyResponseDTO>> findAllReplies(@PathVariable long blogId){
+        List<ReplyResponseDTO> replyList = replyService.findAllByBlogId(blogId);
 
         return ResponseEntity.ok().body(replyList);
     }
 
     @RequestMapping(value = "/{replyId}",method = RequestMethod.GET)
     public ResponseEntity<?> findReply(@PathVariable long replyId){
-        ReplyFindByIdDTO reply = replyService.findByReplyId(replyId);
+        ReplyResponseDTO reply = replyService.findByReplyId(replyId);
 
         try {
             if (reply == null){
@@ -48,9 +48,15 @@ public class ReplyController {
     }
 
     @RequestMapping(value = "", method = RequestMethod.POST)
-                                            // json이기 때문에 @RequestBody(json 데이터 역직렬화헤줌)가 필요하다
-    public ResponseEntity<String> insertReply(@RequestBody ReplyInsertDTO replyInsertDTO){
+    // json이기 때문에 @RequestBody(json 데이터 역직렬화헤줌)가 필요하다
+    public ResponseEntity<String> insertReply(@RequestBody ReplyCreateRequestDTO replyInsertDTO){
         replyService.save(replyInsertDTO);
         return ResponseEntity.ok("저장완료");
+    }
+
+    @RequestMapping(value = "/{replyId}", method = RequestMethod.DELETE)
+    public ResponseEntity<String> deleteReply(@PathVariable long replyId){
+        replyService.deleteByReplyId(replyId);
+        return ResponseEntity.ok("삭제 완료");
     }
 }

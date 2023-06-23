@@ -9,11 +9,11 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @ToString
-public class ReplyUpdateDTO {
+public class ReplyUpdateRequestDTO {
     private long replyId;
     private String replyContent;
 
-    public ReplyUpdateDTO(Reply reply){
+    public ReplyUpdateRequestDTO(Reply reply){
         this.replyId = reply.getReplyId();
         this.replyContent = reply.getReplyContent();
     }
