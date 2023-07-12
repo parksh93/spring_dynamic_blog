@@ -11,6 +11,9 @@
 
 #mybatis.mapper-locations=classpath:mybatis/mapper/**/**.xml
 # -------------------------------------------------------------
+server:
+  port: 8181
+
 
 spring:
     mvc:
@@ -18,12 +21,19 @@ spring:
           prefix: /WEB-INF/views/
           suffix: .jsp
     datasource:
-        url: ${url}
-        username: ${username_}
-        password: ${password}
-        driver-class-name: ${driver-class-name}
+      url: ${url}
+      username: ${username_}
+      password: ${password}
+      driver-class-name: ${driver-class-name}
     profiles:
-        active: db
+      active: db
+    jpa:
+      hibernate:
+        ddl-auto: update
+      properties:
+        hibernate:
+          format_sql: true
+      show-sql: true
 
 mybatis:
     mapper-locations: classpath:mybatis/mapper/**/**.xml

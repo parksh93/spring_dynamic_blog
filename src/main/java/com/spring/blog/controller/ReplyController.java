@@ -3,6 +3,7 @@ package com.spring.blog.controller;
 import com.spring.blog.dto.ReplyResponseDTO;
 import com.spring.blog.dto.ReplyCreateRequestDTO;
 import com.spring.blog.dto.ReplyUpdateRequestDTO;
+import com.spring.blog.entity.Reply;
 import com.spring.blog.exception.NotFoundReplyByReplyIdException;
 import com.spring.blog.service.ReplyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,15 +26,15 @@ public class ReplyController {
     // 어떤 자원에 접근할것인지만 uri에 명시
     @RequestMapping(value = "/{blogId}/all", method = RequestMethod.GET)
     // rest서버는 응답시 응답코드와 응답객체를 넘기기 때문에 ResponseEntity를 리턴
-    public ResponseEntity<List<ReplyResponseDTO>> findAllReplies(@PathVariable long blogId){
-        List<ReplyResponseDTO> replyList = replyService.findAllByBlogId(blogId);
+    public ResponseEntity<List<Reply>> findAllReplies(@PathVariable long blogId){
+        List<Reply> replyList = replyService.findAllByBlogId(blogId);
 
         return ResponseEntity.ok().body(replyList);
     }
 
     @RequestMapping(value = "/{replyId}",method = RequestMethod.GET)
     public ResponseEntity<?> findReply(@PathVariable long replyId){
-        ReplyResponseDTO reply = replyService.findByReplyId(replyId);
+        Reply reply = replyService.findByReplyId(replyId);
 
         try {
             if (reply == null){
@@ -50,8 +51,8 @@ public class ReplyController {
 
     @RequestMapping(value = "", method = RequestMethod.POST)
     // json이기 때문에 @RequestBody(json 데이터 역직렬화헤줌)가 필요하다
-    public ResponseEntity<String> insertReply(@RequestBody ReplyCreateRequestDTO replyCreateRequestDTO){
-        replyService.save(replyCreateRequestDTO);
+    public ResponseEntity<String> insertReply(@RequestBody Reply reply){
+        replyService.save(reply);
         return ResponseEntity.ok("저장완료");
     }
 
@@ -62,10 +63,10 @@ public class ReplyController {
     }
 
     @RequestMapping(value = "/{replyId}", method = {RequestMethod.PUT, RequestMethod.PATCH})
-    public ResponseEntity<String> updateReply(@PathVariable long replyId, @RequestBody ReplyUpdateRequestDTO replyUpdateRequestDTO){
-        replyUpdateRequestDTO.setReplyId(replyId);
+    public ResponseEntity<String> updateReply(@PathVariable long replyId, @RequestBody Reply reply){
+        reply.setReplyId(replyId);
 
-        replyService.update(replyUpdateRequestDTO);
+        replyService.update(reply);
         return ResponseEntity.ok("수정 완료");
     }
 }

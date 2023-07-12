@@ -188,6 +188,7 @@
                     fetch(`/reply/${blogId}/all`, { method: 'get' })
                         .then(res => res.json())
                         .then(data => {
+                            console.log(data)
                             $replies.innerHTML = "";
                             // for (let i of data) {
                             //     let date = new Date(`\${i.publishedAt}`);
