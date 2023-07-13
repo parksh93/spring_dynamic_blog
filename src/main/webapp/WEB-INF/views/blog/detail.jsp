@@ -153,8 +153,8 @@
                         <input type="hidden" class="updateReplyId">
                     </div>
                     <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-                    <button type="button" class="btn btn-primary" id="updateSubmitBtn" data-bs-dismiss="modal">수정</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                        <button type="button" class="btn btn-primary" id="updateSubmitBtn" data-bs-dismiss="modal">수정</button>
                     </div>
                 </div>
                 </div>

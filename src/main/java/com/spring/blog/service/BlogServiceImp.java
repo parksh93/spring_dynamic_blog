@@ -6,6 +6,10 @@ import com.spring.blog.repository.BlogRepository;
 import com.spring.blog.repository.ReplyJPARepository;
 import com.spring.blog.repository.ReplyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,9 +33,27 @@ public class BlogServiceImp implements BlogService{
     }
 
     @Override
-    public List<Blog> findAll() {
+    public Page<Blog> findAll(Long pageNumber) {   // 페이지 정보를 함께 포함하고 있는 리스트인 Page를 리턴
 //        return  blogRepository.findAll(); //Mybatis
-        return blogJPARepository.findAll(); //JPA
+//        return blogJPARepository.findAll(); //JPA
+        if (pageNumber == null || pageNumber <= 0){
+            pageNumber = 1L;
+        }
+
+        long totalPageCount = Math.round(blogJPARepository.count() / 10.0);
+
+        pageNumber = pageNumber > totalPageCount ? totalPageCount : pageNumber;
+
+        // 페이징 처리에 관련된 정보를 먼저 객체로 생성
+        Pageable pageable = PageRequest.of((int)(pageNumber-1), 10, Sort.by("blogId").descending());
+
+        Page<Blog> blogPage = blogJPARepository.findAll(pageable);
+
+//        if (blogPage.getTotalPages()-1 < (int)(pageNumber-1)){
+//            return blogJPARepository.findAll(PageRequest.of(blogPage.getTotalPages()-1,10));
+//        }
+        // 생성된 페이지 정보를 파라미터로 제공해 findAll()을 호출
+        return blogPage;
     }
 
     @Override

@@ -35,7 +35,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <c:forEach var = "i" items = "${blogList}">
+                    <c:forEach var = "i" items = "${pageInfo.getContent()}">
                         <tr>
                             <td scope="row">${i.blogId}</td>
                             <td scope="row"><a href="/blog/detail/${i.blogId}">${i.blogTitle}</a></td>
@@ -47,6 +47,24 @@
                     </c:forEach>
                 </tbody>
             </table>
+            <ul class="pagination justify-content-center">
+                <li class="page-item">
+                    <c:if test ="${startPageNum  > 10}">
+                        <a class="page-link" href="/blog/list/${startPageNum - 1}">이전</a>
+                    </c:if>
+                </li>
+                <c:forEach begin="${startPageNum}" end="${endPageNum}" var="btnNum">
+                    <li class="page-item ${currentPageNum == btnNum ? 'active' : ''}">
+                        <a class="page-link" href="/blog/list/${btnNum}">${btnNum}</a>
+                    </li>
+                </c:forEach>
+
+                <c:if test ="${endPageNum != pageInfo.getTotalPages()}">
+                    <li class="page-item">
+                        <a class="page-link" href="/blog/list/${endPageNum + 1}">다음</a>
+                    </li>
+                </c:if>
+            </ul>
         </div>
     </body>
 </html>

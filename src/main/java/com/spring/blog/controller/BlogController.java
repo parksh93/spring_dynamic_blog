@@ -5,6 +5,7 @@ import com.spring.blog.exception.NotFoundBlogIdException;
 import com.spring.blog.service.BlogService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,16 +19,36 @@ import java.util.List;
 @Log4j2 // sout이 아닌 로깅을 통한 디버깅을 위해 선언
 public class BlogController {
     private BlogService blogService;
+    static final int PAGE_BTN_NUM = 10; // 한페이지에 보여야 하는 페이징 버튼 그룹의 개수
 
     @Autowired
     public BlogController(BlogService blogService) {
         this.blogService = blogService;
     }
 
-    @RequestMapping("/list")
-    public String findAll(Model model){
-        List<Blog> blogList = blogService.findAll();
-        model.addAttribute("blogList",blogList);
+    @RequestMapping(value = {"/list/{pageNumber}", "/list"})
+    public String findAll(Model model, @PathVariable(required = false) Long pageNumber){
+        // List<Blog> blogList = blogService.findAll().toList();
+        Page<Blog> pageInfo = blogService.findAll(pageNumber);
+
+        // 현재 조회중인 페이지 번호(0부터 시작)
+        int currentPageNum = pageInfo.getNumber() + 1;
+        // 현재 조회중인 페이지 그룹의 끝 번호
+        long endPageNum = (long)Math.ceil(currentPageNum / (double)PAGE_BTN_NUM) * PAGE_BTN_NUM;
+
+        // 마지막 그룹번호 보정
+        endPageNum = endPageNum > pageInfo.getTotalPages() ? pageInfo.getTotalPages() : endPageNum;
+
+        // 현재 조회중인 페이지 그룹의 시작번호
+        long startPageNum = endPageNum - PAGE_BTN_NUM + 1;
+
+//        // 이전 페이지 버튼
+//        boolean prevBtn = startPageNum != 1;s
+
+        model.addAttribute("pageInfo", pageInfo);
+        model.addAttribute("currentPageNum", currentPageNum);
+        model.addAttribute("endPageNum", endPageNum);
+        model.addAttribute("startPageNum", startPageNum);
         return "/blog/list";
     }
 

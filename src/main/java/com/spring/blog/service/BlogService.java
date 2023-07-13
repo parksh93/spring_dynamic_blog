@@ -1,11 +1,13 @@
 package com.spring.blog.service;
 
 import com.spring.blog.entity.Blog;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
 public interface BlogService {
-    List<Blog> findAll();
+    Page<Blog> findAll(Long pageNumber);
 
     Blog findById(long blogId);
 
