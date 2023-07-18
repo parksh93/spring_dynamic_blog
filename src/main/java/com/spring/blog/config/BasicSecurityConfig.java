@@ -83,12 +83,13 @@ public class BasicSecurityConfig {  //베이직 방식 인증
 
     // 위의 설절을 따라가는 인증은 어떤 서비스 클래스를 통해 설정할것인가
     @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder, UserService userService) throws Exception {
-        return http.getSharedObject(AuthenticationManagerBuilder.class)
-                .userDetailsService(userService)    // userService에 기술된 내용을 토대로 로그인 처리
-                .passwordEncoder(bCryptPasswordEncoder) //  비밀번호 암호화 저장 모듈
-                .and()
-                .build();
+    public AuthenticationManager authenticationManager(HttpSecurity http,
+                                                       BCryptPasswordEncoder bCryptPasswordEncoder, UserDetailsService userDetailService)
+            throws Exception{
+        AuthenticationManagerBuilder builder = http.getSharedObject(AuthenticationManagerBuilder.class);
+        builder.userDetailsService(userService) // userService에 기술된 내용을 토대로 로그인 처리
+                .passwordEncoder(bCryptPasswordEncoder); // 비밀번호 암호화 저장 모듈
+        return builder.build();
     }
 
     // 암호화 모듈 임포트
