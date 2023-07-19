@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface ReplyJPARepository extends JpaRepository<Reply, Long> {
     List<Reply> findAllByBlogId(Long blogId);
-    void deleteByBlogId(Long blogId);
+    void deleteAllByBlogId(Long blogId);
 }

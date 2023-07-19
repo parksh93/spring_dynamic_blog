@@ -9,7 +9,7 @@
     </head>
     <body>
         <div class=".container">
-            <form action="/login" method="POST">
+            <form action="/login" method="post">
                 <div class="col-3">
                     <!-- id는 username, 비밀번호는 password로 고정 -->
                     <input type="text" name="username" placeholder="아이디">

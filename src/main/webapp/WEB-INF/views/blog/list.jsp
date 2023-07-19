@@ -49,7 +49,7 @@
             </table>
             <ul class="pagination justify-content-center">
                 <li class="page-item">
-                    <c:if test ="${startPageNum  > 10}">
+                    <c:if test ="${startPageNum != 1}">
                         <a class="page-link" href="/blog/list/${startPageNum - 1}">이전</a>
                     </c:if>
                 </li>

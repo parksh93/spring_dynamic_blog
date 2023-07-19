@@ -36,13 +36,14 @@ public class BlogServiceImp implements BlogService{
     public Page<Blog> findAll(Long pageNumber) {   // 페이지 정보를 함께 포함하고 있는 리스트인 Page를 리턴
 //        return  blogRepository.findAll(); //Mybatis
 //        return blogJPARepository.findAll(); //JPA
-        if (pageNumber == null || pageNumber <= 0){
+        if (pageNumber == null || pageNumber <= 0L){
             pageNumber = 1L;
+        }else{
+            long totalPageCount = Math.round(blogJPARepository.count() / 10.0);
+
+            pageNumber = pageNumber > totalPageCount ? totalPageCount : pageNumber;
         }
 
-        long totalPageCount = Math.round(blogJPARepository.count() / 10.0);
-
-        pageNumber = pageNumber > totalPageCount ? totalPageCount : pageNumber;
 
         // 페이징 처리에 관련된 정보를 먼저 객체로 생성
         Pageable pageable = PageRequest.of((int)(pageNumber-1), 10, Sort.by("blogId").descending());
@@ -62,7 +63,7 @@ public class BlogServiceImp implements BlogService{
         return blogJPARepository.findById(blogId).get(); // JPA의 findById는 Optional(참조형 변수에 대해서 null값을 검사및 처리를 쉽게 할수 있는 제너릭) 을 리턴하기 때문에
                                                         // 일반 객체로 만들기 위해서는 .get()을 붙여줘야한다.
                                                         // JPA에서는 Optional 사용 권장
-                                                                                        
+
     }
 
     @Override
@@ -70,7 +71,7 @@ public class BlogServiceImp implements BlogService{
     public void deleteById(long blogId) {
 //        replyRepository.deleteAllByBlogId(blogId);
 //        blogRepository.deleteById(blogId);
-        replyJPARepository.deleteByBlogId(blogId);
+        replyJPARepository.deleteAllByBlogId(blogId);
         blogJPARepository.deleteById(blogId);
     }
 

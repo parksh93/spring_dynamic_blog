@@ -28,7 +28,7 @@
                     </div>
                     <div class="col mb-3">
                         <label for="writer">글쓴이</label>
-                        <input type="text" class="form-control" id="writer" name="writer">
+                        <input type="text" class="form-control" id="writer" name="writer" value="${username}" readonly>
                     </div>
                 </div>
                 

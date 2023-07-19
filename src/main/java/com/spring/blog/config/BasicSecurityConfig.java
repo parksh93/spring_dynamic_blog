@@ -62,17 +62,19 @@ public class BasicSecurityConfig {  //베이직 방식 인증
         // 6.1 이후 버전
         return http
                 .authorizeHttpRequests(authenticationConfig -> {
-                    authenticationConfig.requestMatchers("/login", "/signup", "/user")
+                    authenticationConfig.requestMatchers( "/login", "/signup", "/user")
                             .permitAll()
                             .anyRequest()
                             .authenticated();
                 })
                 .formLogin(formLoginConfig ->{
-                    formLoginConfig.loginPage("/login")
+                    formLoginConfig.loginPage("/login") // 폼에서 날려준 정보를 토대로 처리를 해주는 주소(post)
                         .defaultSuccessUrl("/blog/list");
                 })
                 .logout(logoutConfig -> {
-                    logoutConfig.logoutSuccessUrl("/login")
+                    logoutConfig
+                            //.logoutUrl("loglogout") // 디폴트가 /logout으로 잡아주기 때문에 다른 걸로 변경하기는 방법
+                            .logoutSuccessUrl("/login")
                             .invalidateHttpSession(true);
                 })
                 .csrf(csrfConfig -> {
