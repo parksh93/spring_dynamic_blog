@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -68,14 +69,19 @@ public class BasicSecurityConfig {  //베이직 방식 인증
                             .authenticated();
                 })
                 .formLogin(formLoginConfig ->{
-                    formLoginConfig.loginPage("/login") // 폼에서 날려준 정보를 토대로 처리를 해주는 주소(post)
-                        .defaultSuccessUrl("/blog/list");
+                    formLoginConfig
+                            //.loginPage("/login") // 폼에서 날려준 정보를 토대로 처리를 해주는 주소(post)
+                            //.defaultSuccessUrl("/blog/list");
+                            .disable(); //토큰 기반 로그인시에는 폼 로그인을 막아야한다.
                 })
                 .logout(logoutConfig -> {
                     logoutConfig
                             //.logoutUrl("loglogout") // 디폴트가 /logout으로 잡아주기 때문에 다른 걸로 변경하기는 방법
                             .logoutSuccessUrl("/login")
                             .invalidateHttpSession(true);
+                })
+                .sessionManagement(sessionConfig -> {
+                    sessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
                 })
                 .csrf(csrfConfig -> {
                     csrfConfig.disable();

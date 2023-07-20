@@ -14,7 +14,6 @@
 server:
   port: 8181
 
-
 spring:
     mvc:
       view:
@@ -26,7 +25,7 @@ spring:
       password: ${password}
       driver-class-name: ${driver-class-name}
     profiles:
-      active: db
+      active: db, jwt
     jpa:
       hibernate:
         ddl-auto: update
@@ -34,6 +33,10 @@ spring:
         hibernate:
           format_sql: true
       show-sql: true
+
+jwt:
+  issuer: ${issuer}
+  secret_key: ${secret_key}
 
 mybatis:
     mapper-locations: classpath:mybatis/mapper/**/**.xml

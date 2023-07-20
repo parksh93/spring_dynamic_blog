@@ -27,4 +27,9 @@ public class UsersService { // UserService는 인증만 담당하고 회원가�
 
         userRepository.save(newUser);
     }
+
+    // 아이디를 집어넣으면, 해당 계정 전체 정보를 얻어올 수 있는 메서드
+    public User getByCredentials(String loginId){
+        return userRepository.findByLoginId(loginId);
+    }
 }
