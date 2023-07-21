@@ -1,5 +1,6 @@
 package com.spring.blog.config;
 
+import com.spring.blog.config.jwt.TokenProvider;
 import com.spring.blog.service.UserService;
 import jakarta.servlet.DispatcherType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,15 +15,19 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 
 @Configuration  // 설정 클래스 상위에 붙이는 애노테이션
 public class BasicSecurityConfig {  //베이직 방식 인증
     // 등록할 시큐리티 서비스
     private final UserDetailsService userService;
+    private final TokenProvider tokenProvider;
+
     @Autowired
-    public BasicSecurityConfig(UserDetailsService userService){
+    public BasicSecurityConfig(UserDetailsService userService, TokenProvider tokenProvider){
         this.userService = userService;
+        this.tokenProvider = tokenProvider;
     }
 
 
@@ -73,6 +78,7 @@ public class BasicSecurityConfig {  //베이직 방식 인증
                             //.loginPage("/login") // 폼에서 날려준 정보를 토대로 처리를 해주는 주소(post)
                             //.defaultSuccessUrl("/blog/list");
                             .disable(); //토큰 기반 로그인시에는 폼 로그인을 막아야한다.
+                                        // 커스텀 로그인을 사용하겠다는 의미
                 })
                 .logout(logoutConfig -> {
                     logoutConfig
@@ -86,6 +92,8 @@ public class BasicSecurityConfig {  //베이직 방식 인증
                 .csrf(csrfConfig -> {
                     csrfConfig.disable();
                 })
+                // Before 시점(Request를 서버가 처리하기 직전 시점)에 해당 필터를 사용해 로그인을 검증하도록 설정
+                .addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
@@ -104,5 +112,11 @@ public class BasicSecurityConfig {  //베이직 방식 인증
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder(){
         return new BCryptPasswordEncoder();
+    }
+
+    //필터 클래스 생성
+    @Bean
+    public TokenAuthenticationFilter tokenAuthenticationFilter(){
+        return new TokenAuthenticationFilter(tokenProvider);  // 필터는 생성자에서 토큰 제공자(tokenProvider 클래스)를 요구한다.
     }
 }
