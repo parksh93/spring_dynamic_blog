@@ -30,11 +30,21 @@ public class User implements UserDetails { //UserDetails의 구현체만 스프�
     // 비밀번호 null 허용(OAuth2.0을 활용한 소셜로그인은 비밀번호가 없음)
     private String password;
 
+    //oauth2.0 로그인 사용자의 경우 로그인에 사요안 이메일이 자동으로 닉네임처럼 부여되므로 다른 닉네임을 쓸 수 있게 하려면 닉네임 필드 필요
+   @Column(unique = true)
+   private String nickname;
+
     @Builder
-    public User(String email, String password, String loginId, String auth){    //auth : 인증 정보 요구
+    public User(String email, String password, String loginId, String nickname, String auth){    //auth : 인증 정보 요구
         this.email = email;
         this.password = password;
         this.loginId = loginId;
+        this.nickname = nickname;
+    }
+
+    public User update(String nickname){
+        this.nickname = nickname;
+        return this;
     }
 
     @Override

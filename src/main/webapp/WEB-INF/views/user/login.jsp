@@ -19,6 +19,7 @@
                 </div>
                 <input type="submit" value="로그인">
             </form>
+            <a href="/oauth2/authorization/google">구글로그인</a>
         </div>
     </body>
 </html>
